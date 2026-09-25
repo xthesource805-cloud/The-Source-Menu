@@ -233,15 +233,16 @@
       background: var(--wa-green);
       color: #fff;
       border: none;
-      padding: 12px;
+      padding: 14px;
       border-radius: 6px;
       font-weight: bold;
       font-size: 0.95rem;
       cursor: pointer;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 4px;
       margin-top: 8px;
     }
     .whatsapp-btn:hover {
@@ -321,8 +322,12 @@
       <textarea id="custNotes" class="checkout-input" placeholder="Delivery instructions (gate code, call on arrival, etc.)" rows="2" style="resize:none;"></textarea>
 
       <button class="whatsapp-btn" onclick="sendOrderViaWhatsApp()">
-        Order via WhatsApp
+        <span>Order via WhatsApp</span>
+        <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.9;">Direct to (820) 212-0615</span>
       </button>
+      <div style="text-align: center; font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">
+        Dispatches order instantly via WhatsApp
+      </div>
     </div>
   </div>
 
