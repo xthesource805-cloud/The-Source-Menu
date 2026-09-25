@@ -94,7 +94,7 @@
       margin: 0 auto;
       padding: 0 16px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 16px;
     }
 
@@ -151,23 +151,46 @@
       border-radius: 12px;
     }
 
+    .size-selector {
+      margin-top: 12px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .size-btn {
+      background: #1c1f24;
+      border: 1px solid var(--bg-card-border);
+      color: var(--text-muted);
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .size-btn.active {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+      font-weight: bold;
+    }
+
     .card-footer {
-      margin-top: 16px;
+      margin-top: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-top: 1px solid var(--bg-card-border);
       padding-top: 12px;
     }
-    .card-price { font-size: 0.85rem; font-weight: 700; color: var(--gold); }
+    .card-price { font-size: 0.95rem; font-weight: 700; color: var(--gold); }
     .add-btn {
       background: #252a30;
       color: #fff;
       border: 1px solid var(--bg-card-border);
-      padding: 6px 12px;
+      padding: 6px 14px;
       font-size: 0.75rem;
       border-radius: 4px;
       cursor: pointer;
+      font-weight: 600;
     }
     .add-btn:hover { background: var(--gold); color: #000; }
 
@@ -245,9 +268,7 @@
       gap: 4px;
       margin-top: 8px;
     }
-    .whatsapp-btn:hover {
-      background: #1ebe57;
-    }
+    .whatsapp-btn:hover { background: #1ebe57; }
   </style>
 </head>
 <body>
@@ -305,7 +326,6 @@
       <span id="drawerTotal">$0.00</span>
     </div>
 
-    <!-- Customer Dispatch Details Form -->
     <div class="checkout-form">
       <input type="text" id="custName" class="checkout-input" placeholder="Full Name *" required />
       <input type="tel" id="custPhone" class="checkout-input" placeholder="Callback Phone Number *" required />
@@ -333,52 +353,80 @@
 
   <script>
     const menuData = [
-      { id: 1, category: "Signature Indoor Soil", name: "London Fog", type: "Hybrid", featured: true, flavors: ["Vanilla", "Earl Grey"], effects: ["Calm", "Smooth", "Relaxing"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
-      { id: 2, category: "Signature Indoor Soil", name: "Venom Candy", type: "Indica Dom", featured: false, flavors: ["Sweet berry", "Gas", "Candy"], effects: ["Deep relaxation", "Calm"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
-      { id: 3, category: "Signature Indoor Soil", name: "London Cake", type: "Hybrid", featured: false, flavors: ["Sweet pastry", "Vanilla"], effects: ["Euphoric", "Balanced"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
-      { id: 4, category: "Signature Indoor Soil", name: "Ice Cream Cake", type: "Indica", featured: false, flavors: ["Creamy vanilla", "Cake batter"], effects: ["Sedating", "Heavy relaxation"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
-      { id: 5, category: "Signature Indoor Soil", name: "Gelato", type: "Hybrid", featured: false, flavors: ["Sweet citrus", "Earthy"], effects: ["Balanced", "Euphoric"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
-      { id: 6, category: "Signature Indoor Soil", name: "Ghost Mints", type: "Hybrid", featured: false, flavors: ["Mint", "Pine", "Gas"], effects: ["Uplifting", "Creative"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
-      { id: 7, category: "Signature Indoor Soil", name: "Kandy Runtz", type: "Hybrid", featured: true, flavors: ["Sweet candy", "Fruit"], effects: ["Euphoric", "Uplifting"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
-      { id: 8, category: "Signature Indoor Soil", name: "Cheetah Piss", type: "Hybrid", featured: false, flavors: ["Creamy", "Pungent gas"], effects: ["Energetic", "Uplifting"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
-      { id: 9, category: "Signature Indoor Soil", name: "Permanent Marker x OG", type: "Hybrid", featured: false, flavors: ["Chemical", "OG notes"], effects: ["Relaxing", "Potent"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
-      { id: 10, category: "Signature Indoor Soil", name: "Pop Rocks", type: "Hybrid", featured: false, flavors: ["Sweet candy", "Berry"], effects: ["Euphoric", "Social"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
+      // Signature Indoor Soil ($60 Half | $100 Ounce)
+      { id: 1, category: "Signature Indoor Soil", name: "London Fog", type: "Hybrid", featured: true, flavors: ["Vanilla", "Earl Grey"], effects: ["Calm", "Smooth", "Relaxing"], baseType: "soil", options: [{ label: "1/2 Oz", price: 60, isOz: false }, { label: "1 Oz", price: 100, isOz: true }] },
+      { id: 2, category: "Signature Indoor Soil", name: "Venom Candy", type: "Indica Dom", featured: false, flavors: ["Sweet berry", "Gas", "Candy"], effects: ["Deep relaxation", "Calm"], baseType: "soil", options: [{ label: "1/2 Oz", price: 60, isOz: false }, { label: "1 Oz", price: 100, isOz: true }] },
+      { id: 3, category: "Signature Indoor Soil", name: "London Cake", type: "Hybrid", featured: false, flavors: ["Sweet pastry", "Vanilla"], effects: ["Euphoric", "Balanced"], baseType: "soil", options: [{ label: "1/2 Oz", price: 60, isOz: false }, { label: "1 Oz", price: 100, isOz: true }] },
+      { id: 4, category: "Signature Indoor Soil", name: "Ice Cream Cake", type: "Indica", featured: false, flavors: ["Creamy vanilla", "Cake batter"], effects: ["Sedating", "Heavy relaxation"], baseType: "soil", options: [{ label: "1/2 Oz", price: 60, isOz: false }, { label: "1 Oz", price: 100, isOz: true }] },
+      { id: 5, category: "Signature Indoor Soil", name: "Gelato", type: "Hybrid", featured: false, flavors: ["Sweet citrus", "Earthy"], effects: ["Balanced", "Euphoric"], baseType: "soil", options: [{ label: "1/2 Oz", price: 60, isOz: false }, { label: "1 Oz", price: 100, isOz: true }] },
+      { id: 6, category: "Signature Indoor Soil", name: "Ghost Mints", type: "Hybrid", featured: false, flavors: ["Mint", "Pine", "Gas"], effects: ["Uplifting", "Creative"], baseType: "soil", options: [{ label: "1/2 Oz", price: 60, isOz: false }, { label: "1 Oz", price: 100, isOz: true }] },
+      { id: 7, category: "Signature Indoor Soil", name: "Kandy Runtz", type: "Hybrid", featured: true, flavors: ["Sweet candy", "Fruit"], effects: ["Euphoric", "Uplifting"], baseType: "soil", options: [{ label: "1/2 Oz", price: 60, isOz: false }, { label: "1 Oz", price: 100, isOz: true }] },
+      { id: 8, category: "Signature Indoor Soil", name: "Cheetah Piss", type: "Hybrid", featured: false, flavors: ["Creamy", "Pungent gas"], effects: ["Energetic", "Uplifting"], baseType: "soil", options: [{ label: "1/2 Oz", price: 60, isOz: false }, { label: "1 Oz", price: 100, isOz: true }] },
+      { id: 9, category: "Signature Indoor Soil", name: "Permanent Marker x OG", type: "Hybrid", featured: false, flavors: ["Chemical", "OG notes"], effects: ["Relaxing", "Potent"], baseType: "soil", options: [{ label: "1/2 Oz", price: 60, isOz: false }, { label: "1 Oz", price: 100, isOz: true }] },
+      { id: 10, category: "Signature Indoor Soil", name: "Pop Rocks", type: "Hybrid", featured: false, flavors: ["Sweet candy", "Berry"], effects: ["Euphoric", "Social"], baseType: "soil", options: [{ label: "1/2 Oz", price: 60, isOz: false }, { label: "1 Oz", price: 100, isOz: true }] },
 
-      { id: 11, category: "Hydro Organic Reserve", name: "Frosted Doughnuts", type: "Hybrid", featured: true, flavors: ["Vanilla frosting", "Sweet dough"], effects: ["Calm", "Relaxing", "Balanced"], price: 180, priceDisplay: "$40 3.5G | $120 Half | $180 Oz", baseType: "hydro-org" },
-      { id: 12, category: "Hydro Organic Reserve", name: "South Florida OG", type: "Indica Dom", featured: false, flavors: ["Diesel", "Lemon", "Pine"], effects: ["Heavy", "Deep relaxation"], price: 180, priceDisplay: "$40 3.5G | $120 Half | $180 Oz", baseType: "hydro-org" },
-      { id: 13, category: "Hydro Organic Reserve", name: "King Louis XVIII", type: "Indica", featured: false, flavors: ["Pine", "Earth", "Spice"], effects: ["Sedating", "Heavy"], price: 180, priceDisplay: "$40 3.5G | $120 Half | $180 Oz", baseType: "hydro-org" },
-      { id: 14, category: "Hydro Organic Reserve", name: "Biscotti x Gas Monkey", type: "Indica Dom", featured: false, flavors: ["Cookie", "Fuel", "Cream"], effects: ["Euphoric", "Relaxing"], price: 180, priceDisplay: "$40 3.5G | $120 Half | $180 Oz", baseType: "hydro-org" },
+      // Hydro Organic Reserve ($40 3.5G | $120 Half | $180 Ounce)
+      { id: 11, category: "Hydro Organic Reserve", name: "Frosted Doughnuts", type: "Hybrid", featured: true, flavors: ["Vanilla frosting", "Sweet dough"], effects: ["Calm", "Relaxing", "Balanced"], baseType: "hydro-org", options: [{ label: "3.5G", price: 40 }, { label: "1/2 Oz", price: 120 }, { label: "1 Oz", price: 180 }] },
+      { id: 12, category: "Hydro Organic Reserve", name: "South Florida OG", type: "Indica Dom", featured: false, flavors: ["Diesel", "Lemon", "Pine"], effects: ["Heavy", "Deep relaxation"], baseType: "hydro-org", options: [{ label: "3.5G", price: 40 }, { label: "1/2 Oz", price: 120 }, { label: "1 Oz", price: 180 }] },
+      { id: 13, category: "Hydro Organic Reserve", name: "King Louis XVIII", type: "Indica", featured: false, flavors: ["Pine", "Earth", "Spice"], effects: ["Sedating", "Heavy"], baseType: "hydro-org", options: [{ label: "3.5G", price: 40 }, { label: "1/2 Oz", price: 120 }, { label: "1 Oz", price: 180 }] },
+      { id: 14, category: "Hydro Organic Reserve", name: "Biscotti x Gas Monkey", type: "Indica Dom", featured: false, flavors: ["Cookie", "Fuel", "Cream"], effects: ["Euphoric", "Relaxing"], baseType: "hydro-org", options: [{ label: "3.5G", price: 40 }, { label: "1/2 Oz", price: 120 }, { label: "1 Oz", price: 180 }] },
 
-      { id: 15, category: "Hydro Select Collection", name: "Grapeology", type: "Indica Dom", featured: true, flavors: ["Sweet grape", "Candy fruit"], effects: ["Calm", "Relaxing"], price: 140, priceDisplay: "$30 3.5G | $100 Half | $140 Oz", baseType: "hydro-sel" },
-      { id: 16, category: "Hydro Select Collection", name: "Giraffe Puzzy", type: "Hybrid", featured: false, flavors: ["Earthy", "Citrus"], effects: ["Creative", "Balanced"], price: 140, priceDisplay: "$30 3.5G | $100 Half | $140 Oz", baseType: "hydro-sel" },
-      { id: 17, category: "Hydro Select Collection", name: "Grape Crush", type: "Indica Dom", featured: false, flavors: ["Grape", "Sweet fruit"], effects: ["Calm", "Euphoric"], price: 140, priceDisplay: "$30 3.5G | $100 Half | $140 Oz", baseType: "hydro-sel" },
-      { id: 18, category: "Hydro Select Collection", name: "Jello Shot", type: "Hybrid", featured: false, flavors: ["Candy", "Sweet fruit"], effects: ["Focused", "Uplifting"], price: 140, priceDisplay: "$30 3.5G | $100 Half | $140 Oz", baseType: "hydro-sel" },
-      { id: 19, category: "Hydro Select Collection", name: "Jelly Runtz", type: "Hybrid", featured: false, flavors: ["Tropical", "Berry", "Candy"], effects: ["Euphoric", "Social"], price: 140, priceDisplay: "$30 3.5G | $100 Half | $140 Oz", baseType: "hydro-sel" },
-      { id: 20, category: "Hydro Select Collection", name: "Dirty Sprite OG", type: "Hybrid", featured: false, flavors: ["Citrus", "Fuel", "Earth"], effects: ["Strong", "Relaxing"], price: 140, priceDisplay: "$30 3.5G | $100 Half | $140 Oz", baseType: "hydro-sel" },
+      // Hydro Select Collection ($30 3.5G | $100 Half | $140 Ounce)
+      { id: 15, category: "Hydro Select Collection", name: "Grapeology", type: "Indica Dom", featured: true, flavors: ["Sweet grape", "Candy fruit"], effects: ["Calm", "Relaxing"], baseType: "hydro-sel", options: [{ label: "3.5G", price: 30 }, { label: "1/2 Oz", price: 100 }, { label: "1 Oz", price: 140 }] },
+      { id: 16, category: "Hydro Select Collection", name: "Giraffe Puzzy", type: "Hybrid", featured: false, flavors: ["Earthy", "Citrus"], effects: ["Creative", "Balanced"], baseType: "hydro-sel", options: [{ label: "3.5G", price: 30 }, { label: "1/2 Oz", price: 100 }, { label: "1 Oz", price: 140 }] },
+      { id: 17, category: "Hydro Select Collection", name: "Grape Crush", type: "Indica Dom", featured: false, flavors: ["Grape", "Sweet fruit"], effects: ["Calm", "Euphoric"], baseType: "hydro-sel", options: [{ label: "3.5G", price: 30 }, { label: "1/2 Oz", price: 100 }, { label: "1 Oz", price: 140 }] },
+      { id: 18, category: "Hydro Select Collection", name: "Jello Shot", type: "Hybrid", featured: false, flavors: ["Candy", "Sweet fruit"], effects: ["Focused", "Uplifting"], baseType: "hydro-sel", options: [{ label: "3.5G", price: 30 }, { label: "1/2 Oz", price: 100 }, { label: "1 Oz", price: 140 }] },
+      { id: 19, category: "Hydro Select Collection", name: "Jelly Runtz", type: "Hybrid", featured: false, flavors: ["Tropical", "Berry", "Candy"], effects: ["Euphoric", "Social"], baseType: "hydro-sel", options: [{ label: "3.5G", price: 30 }, { label: "1/2 Oz", price: 100 }, { label: "1 Oz", price: 140 }] },
+      { id: 20, category: "Hydro Select Collection", name: "Dirty Sprite OG", type: "Hybrid", featured: false, flavors: ["Citrus", "Fuel", "Earth"], effects: ["Strong", "Relaxing"], baseType: "hydro-sel", options: [{ label: "3.5G", price: 30 }, { label: "1/2 Oz", price: 100 }, { label: "1 Oz", price: 140 }] },
 
-      { id: 21, category: "Light Dep Collection", name: "Bubble Gum x Horchata", type: "Craft", featured: true, flavors: ["Bubble gum", "Cream", "Cinnamon"], effects: ["Balanced", "Relaxing"], price: 80, priceDisplay: "$60 / $80 Oz", baseType: "light-dep" },
-      { id: 22, category: "Light Dep Collection", name: "Purple Skunk", type: "Craft", featured: false, flavors: ["Floral", "Earthy", "Skunk"], effects: ["Relaxing", "Calm"], price: 60, priceDisplay: "$60 Oz", baseType: "light-dep" },
+      // Light Dep Collection
+      { id: 21, category: "Light Dep Collection", name: "Bubble Gum x Horchata", type: "Craft", featured: true, flavors: ["Bubble gum", "Cream", "Cinnamon"], effects: ["Balanced", "Relaxing"], baseType: "light-dep", options: [{ label: "1/2 Oz", price: 60 }, { label: "1 Oz", price: 80 }] },
+      { id: 22, category: "Light Dep Collection", name: "Purple Skunk", type: "Craft", featured: false, flavors: ["Floral", "Earthy", "Skunk"], effects: ["Relaxing", "Calm"], baseType: "light-dep", options: [{ label: "1 Oz", price: 60 }] },
 
-      { id: 23, category: "Infused Blunts", name: "Sativa Infused Blunt (2.25G)", type: "Sativa", featured: true, flavors: ["Citrus", "Tropical"], effects: ["Energetic", "Focused"], price: 20, priceDisplay: "$20 Each", baseType: "blunt" },
-      { id: 24, category: "Infused Blunts", name: "Hybrid Infused Blunt (2.25G)", type: "Hybrid", featured: false, flavors: ["Candy", "Fruit"], effects: ["Balanced", "Social"], price: 20, priceDisplay: "$20 Each", baseType: "blunt" },
-      { id: 25, category: "Infused Blunts", name: "Indica Infused Blunt (2.25G)", type: "Indica", featured: false, flavors: ["Cookie", "Cream"], effects: ["Relaxing", "Sedating"], price: 20, priceDisplay: "$20 Each", baseType: "blunt" },
+      // Infused Blunts ($20 Each)
+      { id: 23, category: "Infused Blunts", name: "Sativa Infused Blunt (2.25G)", type: "Sativa", featured: true, flavors: ["Citrus", "Tropical"], effects: ["Energetic", "Focused"], baseType: "blunt", options: [{ label: "2.25G", price: 20 }] },
+      { id: 24, category: "Infused Blunts", name: "Hybrid Infused Blunt (2.25G)", type: "Hybrid", featured: false, flavors: ["Candy", "Fruit"], effects: ["Balanced", "Social"], baseType: "blunt", options: [{ label: "2.25G", price: 20 }] },
+      { id: 25, category: "Infused Blunts", name: "Indica Infused Blunt (2.25G)", type: "Indica", featured: false, flavors: ["Cookie", "Cream"], effects: ["Relaxing", "Sedating"], baseType: "blunt", options: [{ label: "2.25G", price: 20 }] },
 
-      { id: 26, category: "2G Disposables", name: "GOO'D Coconut Cream 2G", type: "Hybrid", featured: true, flavors: ["Coconut", "Cream"], effects: ["Balanced", "Smooth"], price: 30, priceDisplay: "$30 Each", baseType: "disposable" },
-      { id: 27, category: "2G Disposables", name: "Muha Bubble Gum Burst", type: "Sativa", featured: false, flavors: ["Bubble gum"], effects: ["Energetic", "Uplifting"], price: 30, priceDisplay: "$30 Each", baseType: "disposable" },
-      { id: 28, category: "2G Disposables", name: "Muha Habibi", type: "Sativa", featured: false, flavors: ["Bright citrus"], effects: ["Energetic", "Focused"], price: 30, priceDisplay: "$30 Each", baseType: "disposable" },
-      { id: 29, category: "2G Disposables", name: "Muha Pineapple Paradise", type: "Hybrid", featured: false, flavors: ["Pineapple"], effects: ["Balanced", "Euphoric"], price: 30, priceDisplay: "$30 Each", baseType: "disposable" },
+      // 2G Disposables ($30 Each)
+      { id: 26, category: "2G Disposables", name: "GOO'D Coconut Cream 2G", type: "Hybrid", featured: true, flavors: ["Coconut", "Cream"], effects: ["Balanced", "Smooth"], baseType: "disposable", options: [{ label: "2G", price: 30 }] },
+      { id: 27, category: "2G Disposables", name: "Muha Bubble Gum Burst", type: "Sativa", featured: false, flavors: ["Bubble gum"], effects: ["Energetic", "Uplifting"], baseType: "disposable", options: [{ label: "2G", price: 30 }] },
+      { id: 28, category: "2G Disposables", name: "Muha Habibi", type: "Sativa", featured: false, flavors: ["Bright citrus"], effects: ["Energetic", "Focused"], baseType: "disposable", options: [{ label: "2G", price: 30 }] },
+      { id: 29, category: "2G Disposables", name: "Muha Pineapple Paradise", type: "Hybrid", featured: false, flavors: ["Pineapple"], effects: ["Balanced", "Euphoric"], baseType: "disposable", options: [{ label: "2G", price: 30 }] },
 
-      { id: 30, category: "Concentrates", name: "Motor Breath with Crystals", type: "Hybrid Wax", featured: true, flavors: ["Diesel", "Earth", "Fuel"], effects: ["Potent", "Relaxing"], price: 100, priceDisplay: "$100 Oz", baseType: "wax" }
+      // Concentrates ($100 Ounce)
+      { id: 30, category: "Concentrates", name: "Motor Breath with Crystals", type: "Hybrid Wax", featured: true, flavors: ["Diesel", "Earth", "Fuel"], effects: ["Potent", "Relaxing"], baseType: "wax", options: [{ label: "1 Oz", price: 100 }] }
     ];
 
     let activeCategory = "All";
+    let selectedOptions = {}; // Tracks selected size per item ID
     let cart = [];
+
+    // Initialize default selections to the first option
+    menuData.forEach(item => {
+      selectedOptions[item.id] = 0;
+    });
 
     function setCategory(cat, btn) {
       activeCategory = cat;
       document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderItems();
+    }
+
+    function selectSize(itemId, optIndex) {
+      selectedOptions[itemId] = optIndex;
+      const item = menuData.find(i => i.id === itemId);
+      const chosen = item.options[optIndex];
+      
+      // Update displayed price on card
+      document.getElementById(`price-${itemId}`).innerText = `$${chosen.price}`;
+      
+      // Update active button state
+      const buttons = document.querySelectorAll(`.size-btn-${itemId}`);
+      buttons.forEach((b, idx) => {
+        b.classList.toggle('active', idx === optIndex);
+      });
     }
 
     function getBadgeClass(type) {
@@ -404,6 +452,9 @@
       });
 
       filtered.forEach(item => {
+        const currentOptIdx = selectedOptions[item.id] || 0;
+        const activeOption = item.options[currentOptIdx];
+
         const card = document.createElement('div');
         card.className = `card ${item.featured ? 'featured' : ''}`;
         card.innerHTML = `
@@ -420,9 +471,20 @@
               <div class="meta-label">Effect</div>
               <div class="pills">${item.effects.map(e => `<span class="pill">${e}</span>`).join('')}</div>
             </div>
+            
+            <div class="size-selector">
+              ${item.options.map((opt, idx) => `
+                <button type="button" 
+                  class="size-btn size-btn-${item.id}${idx === currentOptIdx ? 'active' : ''}" 
+                  onclick="selectSize(${item.id},${idx})">
+                  ${opt.label}
+                </button>
+              `).join('')}
+            </div>
           </div>
+          
           <div class="card-footer">
-            <span class="card-price">${item.priceDisplay}</span>
+            <span class="card-price" id="price-${item.id}">$${activeOption.price}</span>
             <button class="add-btn" onclick="addToCart(${item.id})">+ Add</button>
           </div>
         `;
@@ -432,27 +494,38 @@
 
     function addToCart(id) {
       const item = menuData.find(i => i.id === id);
-      cart.push(item);
+      const chosenOpt = item.options[selectedOptions[id] || 0];
+
+      cart.push({
+        id: item.id,
+        name: item.name,
+        category: item.category,
+        baseType: item.baseType,
+        size: chosenOpt.label,
+        price: chosenOpt.price,
+        isOz: chosenOpt.isOz === true
+      });
+
       updateCartDisplay();
     }
 
     function calculateCartTotal() {
-      const soilCount = cart.filter(i => i.baseType === 'soil').length;
+      // Reserve Bundle applies only to Soil Ounces (1 Oz), Disposables, and Blunts
+      const soilOzCount = cart.filter(i => i.baseType === 'soil' && i.isOz).length;
       const dispCount = cart.filter(i => i.baseType === 'disposable').length;
       const bluntCount = cart.filter(i => i.baseType === 'blunt').length;
 
-      const bundlesPossible = Math.min(soilCount, dispCount, bluntCount);
+      const bundlesPossible = Math.min(soilOzCount, dispCount, bluntCount);
 
       const rawTotal = cart.reduce((sum, item) => sum + item.price, 0);
-      const discount = bundlesPossible * 30;
+      const discount = bundlesPossible * 30; // Bundle value $150 down to $120
       const finalTotal = rawTotal - discount;
 
       return { finalTotal, bundlesPossible };
     }
 
     function updateCartDisplay() {
-      const count = cart.length;
-      document.getElementById('cartCount').innerText = count;
+      document.getElementById('cartCount').innerText = cart.length;
 
       const { finalTotal, bundlesPossible } = calculateCartTotal();
       const formattedTotal = `$${finalTotal.toFixed(2)}`;
@@ -470,7 +543,7 @@
       list.innerHTML = cart.map((item, idx) => `
         <div class="cart-item">
           <div>
-            <div>${item.name}</div>
+            <div>${item.name} (${item.size})</div>
             <div style="font-size:0.75rem; color:var(--text-muted);">$${item.price}</div>
           </div>
           <button style="background:none; border:none; color:#e06c75; cursor:pointer;" onclick="removeFromCart(${idx})">&times;</button>
@@ -501,7 +574,7 @@
       }
 
       const { finalTotal, bundlesPossible } = calculateCartTotal();
-      const itemsList = cart.map(i => `• ${i.name} ($${i.price})`).join('\n');
+      const itemsList = cart.map(i => `• ${i.name} (${i.size}) - $${i.price}`).join('\n');
 
       let orderText = `*THE SOURCE RESERVE ORDER*\n\n`;
       orderText += `*Name:* ${name}\n`;
