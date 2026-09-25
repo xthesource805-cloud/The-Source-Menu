@@ -1,0 +1,9 @@
+{
+  "name": "The Source Reserve Experience",
+  "short_name": "The Source",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0c0d0e",
+  "theme_color": "#0c0d0e",
+  "orientation": "portrait-primary"
+}
