@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#0c0d0e" />
+  <title>The Source Reserve Experience</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <style>
+    :root {
+      --bg-main: #0c0d0e;
+      --bg-card: #151719;
+      --bg-card-border: #24272b;
+      --gold: #d4af37;
+      --gold-dim: #997f26;
+      --text-main: #f1f2f3;
+      --text-muted: #8e959e;
+      --pill-bg: #22262b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg-main); color: var(--text-main); padding-bottom: 90px; }
+
+    header {
+      background: linear-gradient(180deg, #181b1e 0%, var(--bg-main) 100%);
+      padding: 24px 20px 16px;
+      text-align: center;
+      border-bottom: 1px solid var(--bg-card-border);
+    }
+    header h1 { font-size: 1.5rem; letter-spacing: 2px; color: var(--gold); text-transform: uppercase; }
+    header p { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; letter-spacing: 1px; }
+
+    .bundle-banner {
+      background: #1b1a13;
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      margin: 16px auto;
+      max-width: 900px;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .bundle-title { font-weight: bold; color: var(--gold); font-size: 0.95rem; }
+    .bundle-sub { font-size: 0.8rem; color: var(--text-muted); }
+    .bundle-price { font-size: 1.25rem; font-weight: bold; color: #fff; }
+
+    .controls {
+      max-width: 900px;
+      margin: 16px auto;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .search-bar input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 6px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.95rem;
+    }
+    .filters {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .filter-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .filter-btn.active {
+      background: var(--gold);
+      color: #000;
+      font-weight: bold;
+      border-color: var(--gold);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--bg-card-border);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .card.featured {
+      border-color: var(--gold-dim);
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.15);
+    }
+    .featured-tag {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--gold);
+      color: #000;
+      font-size: 0.65rem;
+      font-weight: bold;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .card-category { font-size: 0.7rem; color: var(--gold); text-transform: uppercase; margin-bottom: 4px; }
+    .card-title { font-size: 1.15rem; font-weight: bold; margin-bottom: 6px; }
+    .badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      width: fit-content;
+      text-transform: uppercase;
+    }
+    .badge-hybrid { background: #392b47; color: #c499f5; }
+    .badge-indica { background: #22374a; color: #7cb8eb; }
+    .badge-sativa { background: #45341f; color: #ebb267; }
+    .badge-craft { background: #233e2e; color: #76d498; }
+
+    .meta-group { margin-bottom: 8px; }
+    .meta-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+    .pills { display: flex; flex-wrap: wrap; gap: 4px; }
+    .pill {
+      background: var(--pill-bg);
+      font-size: 0.7rem;
+      color: #d1d5db;
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+
+    .card-footer {
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--bg-card-border);
+      padding-top: 12px;
+    }
+    .card-price { font-size: 0.85rem; font-weight: 700; color: var(--gold); }
+    .add-btn {
+      background: #252a30;
+      color: #fff;
+      border: 1px solid var(--bg-card-border);
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .add-btn:hover { background: var(--gold); color: #000; }
+
+    .bottom-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #141618;
+      border-top: 1px solid var(--bg-card-border);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+    .bar-total { font-size: 1rem; font-weight: bold; }
+    .view-cart-btn {
+      background: var(--gold);
+      color: #000;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0; right: -100%; bottom: 0;
+      width: 100%;
+      max-width: 380px;
+      background: #151719;
+      box-shadow: -4px 0 16px rgba(0,0,0,0.6);
+      transition: right 0.3s ease;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    .cart-drawer.open { right: 0; }
+    .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bg-card-border); padding-bottom: 12px; }
+    .close-btn { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; }
+    .cart-items { flex: 1; overflow-y: auto; margin: 16px 0; display: flex; flex-direction: column; gap: 10px; }
+    .cart-item { display: flex; justify-content: space-between; background: #1b1e22; padding: 10px; border-radius: 6px; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>The Source</h1>
+    <p>Reserve Experience &bull; Curated Collection</p>
+  </header>
+
+  <div class="bundle-banner">
+    <div>
+      <div class="bundle-title">Limited-Time Reserve Bundle</div>
+      <div class="bundle-sub">Indoor Soil Ounce + 2G Disposable + 2.25G Infused Blunt</div>
+    </div>
+    <div class="bundle-price">$120 <span style="font-size:0.75rem; color:var(--text-muted); text-decoration:line-through;">$150</span></div>
+  </div>
+
+  <div class="controls">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search strains, flavors, effects..." oninput="renderItems()"/>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" onclick="setCategory('All', this)">All</button>
+      <button class="filter-btn" onclick="setCategory('Signature Indoor Soil', this)">Indoor Soil</button>
+      <button class="filter-btn" onclick="setCategory('Hydro Organic Reserve', this)">Hydro Organic</button>
+      <button class="filter-btn" onclick="setCategory('Hydro Select Collection', this)">Hydro Select</button>
+      <button class="filter-btn" onclick="setCategory('Light Dep Collection', this)">Light Dep</button>
+      <button class="filter-btn" onclick="setCategory('Infused Blunts', this)">Blunts</button>
+      <button class="filter-btn" onclick="setCategory('2G Disposables', this)">Disposables</button>
+      <button class="filter-btn" onclick="setCategory('Concentrates', this)">Concentrates</button>
+    </div>
+  </div>
+
+  <div class="container" id="menuContainer"></div>
+
+  <div class="bottom-bar">
+    <div>
+      <div style="font-size:0.75rem; color:var(--text-muted);">Current Tally</div>
+      <div class="bar-total" id="barTotal">$0.00</div>
+    </div>
+    <button class="view-cart-btn" onclick="toggleCart()">Order Tally (<span id="cartCount">0</span>)</button>
+  </div>
+
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>Your Tally</h3>
+      <button class="close-btn" onclick="toggleCart()">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div id="bundleStatus" style="font-size:0.8rem; margin-bottom:12px; color:var(--gold);"></div>
+    <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.1rem; margin-bottom:16px;">
+      <span>Total:</span>
+      <span id="drawerTotal">$0.00</span>
+    </div>
+    <button class="view-cart-btn" style="width:100%; text-align:center;" onclick="copyOrder()">Copy Summary</button>
+  </div>
+
+  <script>
+    const menuData = [
+      { id: 1, category: "Signature Indoor Soil", name: "London Fog", type: "Hybrid", featured: true, flavors: ["Vanilla", "Earl Grey"], effects: ["Calm", "Smooth", "Relaxing"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
+      { id: 2, category: "Signature Indoor Soil", name: "Venom Candy", type: "Indica Dom", featured: false, flavors: ["Sweet berry", "Gas", "Candy"], effects: ["Deep relaxation", "Calm"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
+      { id: 3, category: "Signature Indoor Soil", name: "London Cake", type: "Hybrid", featured: false, flavors: ["Sweet pastry", "Vanilla"], effects: ["Euphoric", "Balanced"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
+      { id: 4, category: "Signature Indoor Soil", name: "Ice Cream Cake", type: "Indica", featured: false, flavors: ["Creamy vanilla", "Cake batter"], effects: ["Sedating", "Heavy relaxation"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
+      { id: 5, category: "Signature Indoor Soil", name: "Gelato", type: "Hybrid", featured: false, flavors: ["Sweet citrus", "Earthy"], effects: ["Balanced", "Euphoric"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
+      { id: 6, category: "Signature Indoor Soil", name: "Ghost Mints", type: "Hybrid", featured: false, flavors: ["Mint", "Pine", "Gas"], effects: ["Uplifting", "Creative"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
+      { id: 7, category: "Signature Indoor Soil", name: "Kandy Runtz", type: "Hybrid", featured: true, flavors: ["Sweet candy", "Fruit"], effects: ["Euphoric", "Uplifting"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
+      { id: 8, category: "Signature Indoor Soil", name: "Cheetah Piss", type: "Hybrid", featured: false, flavors: ["Creamy", "Pungent gas"], effects: ["Energetic", "Uplifting"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
+      { id: 9, category: "Signature Indoor Soil", name: "Permanent Marker x OG", type: "Hybrid", featured: false, flavors: ["Chemical", "OG notes"], effects: ["Relaxing", "Potent"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
+      { id: 10, category: "Signature Indoor Soil", name: "Pop Rocks", type: "Hybrid", featured: false, flavors: ["Sweet candy", "Berry"], effects: ["Euphoric", "Social"], price: 100, priceDisplay: "$60 Half | $100 Oz", baseType: "soil" },
+
+      { id: 11, category: "Hydro Organic Reserve", name: "Frosted Doughnuts", type: "Hybrid", featured: true, flavors: ["Vanilla frosting", "Sweet dough"], effects: ["Calm", "Relaxing", "Balanced"], price: 180, priceDisplay: "$40 3.5G | $120 Half | $180 Oz", baseType: "hydro-org" },
+      { id: 12, category: "Hydro Organic Reserve", name: "South Florida OG", type: "Indica Dom", featured: false, flavors: ["Diesel", "Lemon", "Pine"], effects: ["Heavy", "Deep relaxation"], price: 180, priceDisplay: "$40 3.5G | $120 Half | $180 Oz", baseType: "hydro-org" },
+      { id: 13, category: "Hydro Organic Reserve", name: "King Louis XVIII", type: "Indica", featured: false, flavors: ["Pine", "Earth", "Spice"], effects: ["Sedating", "Heavy"], price: 180, priceDisplay: "$40 3.5G | $120 Half | $180 Oz", baseType: "hydro-org" },
+      { id: 14, category: "Hydro Organic Reserve", name: "Biscotti x Gas Monkey", type: "Indica Dom", featured: false, flavors: ["Cookie", "Fuel", "Cream"], effects: ["Euphoric", "Relaxing"], price: 180, priceDisplay: "$40 3.5G | $120 Half | $180 Oz", baseType: "hydro-org" },
+
+      { id: 15, category: "Hydro Select Collection", name: "Grapeology", type: "Indica Dom", featured: true, flavors: ["Sweet grape", "Candy fruit"], effects: ["Calm", "Relaxing"], price: 140, priceDisplay: "$30 3.5G | $100 Half | $140 Oz", baseType: "hydro-sel" },
+      { id: 16, category: "Hydro Select Collection", name: "Giraffe Puzzy", type: "Hybrid", featured: false, flavors: ["Earthy", "Citrus"], effects: ["Creative", "Balanced"], price: 140, priceDisplay: "$30 3.5G | $100 Half | $140 Oz", baseType: "hydro-sel" },
+      { id: 17, category: "Hydro Select Collection", name: "Grape Crush", type: "Indica Dom", featured: false, flavors: ["Grape", "Sweet fruit"], effects: ["Calm", "Euphoric"], price: 140, priceDisplay: "$30 3.5G | $100 Half | $140 Oz", baseType: "hydro-sel" },
+      { id: 18, category: "Hydro Select Collection", name: "Jello Shot", type: "Hybrid", featured: false, flavors: ["Candy", "Sweet fruit"], effects: ["Focused", "Uplifting"], price: 140, priceDisplay: "$30 3.5G | $100 Half | $140 Oz", baseType: "hydro-sel" },
+      { id: 19, category: "Hydro Select Collection", name: "Jelly Runtz", type: "Hybrid", featured: false, flavors: ["Tropical", "Berry", "Candy"], effects: ["Euphoric", "Social"], price: 140, priceDisplay: "$30 3.5G | $100 Half | $140 Oz", baseType: "hydro-sel" },
+      { id: 20, category: "Hydro Select Collection", name: "Dirty Sprite OG", type: "Hybrid", featured: false, flavors: ["Citrus", "Fuel", "Earth"], effects: ["Strong", "Relaxing"], price: 140, priceDisplay: "$30 3.5G | $100 Half | $140 Oz", baseType: "hydro-sel" },
+
+      { id: 21, category: "Light Dep Collection", name: "Bubble Gum x Horchata", type: "Craft", featured: true, flavors: ["Bubble gum", "Cream", "Cinnamon"], effects: ["Balanced", "Relaxing"], price: 80, priceDisplay: "$60 / $80 Oz", baseType: "light-dep" },
+      { id: 22, category: "Light Dep Collection", name: "Purple Skunk", type: "Craft", featured: false, flavors: ["Floral", "Earthy", "Skunk"], effects: ["Relaxing", "Calm"], price: 60, priceDisplay: "$60 Oz", baseType: "light-dep" },
+
+      { id: 23, category: "Infused Blunts", name: "Sativa Infused Blunt (2.25G)", type: "Sativa", featured: true, flavors: ["Citrus", "Tropical"], effects: ["Energetic", "Focused"], price: 20, priceDisplay: "$20 Each", baseType: "blunt" },
+      { id: 24, category: "Infused Blunts", name: "Hybrid Infused Blunt (2.25G)", type: "Hybrid", featured: false, flavors: ["Candy", "Fruit"], effects: ["Balanced", "Social"], price: 20, priceDisplay: "$20 Each", baseType: "blunt" },
+      { id: 25, category: "Infused Blunts", name: "Indica Infused Blunt (2.25G)", type: "Indica", featured: false, flavors: ["Cookie", "Cream"], effects: ["Relaxing", "Sedating"], price: 20, priceDisplay: "$20 Each", baseType: "blunt" },
+
+      { id: 26, category: "2G Disposables", name: "GOO'D Coconut Cream 2G", type: "Hybrid", featured: true, flavors: ["Coconut", "Cream"], effects: ["Balanced", "Smooth"], price: 30, priceDisplay: "$30 Each", baseType: "disposable" },
+      { id: 27, category: "2G Disposables", name: "Muha Bubble Gum Burst", type: "Sativa", featured: false, flavors: ["Bubble gum"], effects: ["Energetic", "Uplifting"], price: 30, priceDisplay: "$30 Each", baseType: "disposable" },
+      { id: 28, category: "2G Disposables", name: "Muha Habibi", type: "Sativa", featured: false, flavors: ["Bright citrus"], effects: ["Energetic", "Focused"], price: 30, priceDisplay: "$30 Each", baseType: "disposable" },
+      { id: 29, category: "2G Disposables", name: "Muha Pineapple Paradise", type: "Hybrid", featured: false, flavors: ["Pineapple"], effects: ["Balanced", "Euphoric"], price: 30, priceDisplay: "$30 Each", baseType: "disposable" },
+
+      { id: 30, category: "Concentrates", name: "Motor Breath with Crystals", type: "Hybrid Wax", featured: true, flavors: ["Diesel", "Earth", "Fuel"], effects: ["Potent", "Relaxing"], price: 100, priceDisplay: "$100 Oz", baseType: "wax" }
+    ];
+
+    let activeCategory = "All";
+    let cart = [];
+
+    function setCategory(cat, btn) {
+      activeCategory = cat;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderItems();
+    }
+
+    function getBadgeClass(type) {
+      const t = type.toLowerCase();
+      if (t.includes('indica')) return 'badge-indica';
+      if (t.includes('sativa')) return 'badge-sativa';
+      if (t.includes('craft')) return 'badge-craft';
+      return 'badge-hybrid';
+    }
+
+    function renderItems() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const container = document.getElementById('menuContainer');
+      container.innerHTML = '';
+
+      const filtered = menuData.filter(item => {
+        const matchesCategory = activeCategory === "All" || item.category === activeCategory;
+        const matchesSearch = item.name.toLowerCase().includes(query) ||
+          item.flavors.some(f => f.toLowerCase().includes(query)) ||
+          item.effects.some(e => e.toLowerCase().includes(query)) ||
+          item.type.toLowerCase().includes(query);
+        return matchesCategory && matchesSearch;
+      });
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = `card ${item.featured ? 'featured' : ''}`;
+        card.innerHTML = `
+          ${item.featured ? '<div class="featured-tag">FEATURED</div>' : ''}
+          <div>
+            <div class="card-category">${item.category}</div>
+            <div class="card-title">${item.name}</div>
+            <div class="badge ${getBadgeClass(item.type)}">${item.type}</div>
+            <div class="meta-group">
+              <div class="meta-label">Flavor</div>
+              <div class="pills">${item.flavors.map(f => `<span class="pill">${f}</span>`).join('')}</div>
+            </div>
+            <div class="meta-group">
+              <div class="meta-label">Effect</div>
+              <div class="pills">${item.effects.map(e => `<span class="pill">${e}</span>`).join('')}</div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="card-price">${item.priceDisplay}</span>
+            <button class="add-btn" onclick="addToCart(${item.id})">+ Add</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function addToCart(id) {
+      const item = menuData.find(i => i.id === id);
+      cart.push(item);
+      updateCartDisplay();
+    }
+
+    function calculateCartTotal() {
+      const soilCount = cart.filter(i => i.baseType === 'soil').length;
+      const dispCount = cart.filter(i => i.baseType === 'disposable').length;
+      const bluntCount = cart.filter(i => i.baseType === 'blunt').length;
+
+      const bundlesPossible = Math.min(soilCount, dispCount, bluntCount);
+
+      const rawTotal = cart.reduce((sum, item) => sum + item.price, 0);
+      const discount = bundlesPossible * 30;
+      const finalTotal = rawTotal - discount;
+
+      return { finalTotal, bundlesPossible };
+    }
+
+    function updateCartDisplay() {
+      const count = cart.length;
+      document.getElementById('cartCount').innerText = count;
+
+      const { finalTotal, bundlesPossible } = calculateCartTotal();
+      const formattedTotal = `$${finalTotal.toFixed(2)}`;
+      document.getElementById('barTotal').innerText = formattedTotal;
+      document.getElementById('drawerTotal').innerText = formattedTotal;
+
+      const status = document.getElementById('bundleStatus');
+      if (bundlesPossible > 0) {
+        status.innerText = `🎉 ${bundlesPossible}x Reserve Bundle applied (-$${bundlesPossible * 30})!`;
+      } else {
+        status.innerText = '';
+      }
+
+      const list = document.getElementById('cartItems');
+      list.innerHTML = cart.map((item, idx) => `
+        <div class="cart-item">
+          <div>
+            <div>${item.name}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">$${item.price}</div>
+          </div>
+          <button style="background:none; border:none; color:#e06c75; cursor:pointer;" onclick="removeFromCart(${idx})">&times;</button>
+        </div>
+      `).join('');
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartDisplay();
+    }
+
+    function toggleCart() {
+      document.getElementById('cartDrawer').classList.toggle('open');
+    }
+
+    function copyOrder() {
+      if (cart.length === 0) return alert('Your tally is empty.');
+      const itemsList = cart.map(i => `- ${i.name} ($${i.price})`).join('\n');
+      const { finalTotal, bundlesPossible } = calculateCartTotal();
+      let msg = `The Source Reserve Order:\n${itemsList}\n`;
+      if (bundlesPossible > 0) msg += `\nReserve Bundle Applied: ${bundlesPossible}x (-$${bundlesPossible * 30})\n`;
+      msg += `\nEstimated Total: $${finalTotal.toFixed(2)}`;
+
+      navigator.clipboard.writeText(msg).then(() => {
+        alert('Order summary copied to clipboard!');
+      });
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('Service Worker registered:', reg.scope))
+          .catch(err => console.log('Service Worker registration failed:', err));
+      });
+    }
+
+    renderItems();
+  </script>
+</body>
+</html>
